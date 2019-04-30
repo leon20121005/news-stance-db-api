@@ -19,15 +19,32 @@ const pad_zero = function(number, width)
     }
 }
 
-for (var index = 1; index <= 10000; index++)
+const insert_news = function(round)
 {
-    const news_file = fs.readFileSync(`./NC_1 seg_context/news_${pad_zero(index, 6)}.json`);
-    const news_object = JSON.parse(news_file);
-    News.create(news_object, function(error, document)
+    const news_object_list = [];
+    for (var index = round * 10000 + 1; index <= (round + 1) * 10000; index++)
+    {
+        const news_file = fs.readFileSync(`../NC_1 seg_context/news_${pad_zero(index, 6)}.json`);
+        const news_object = JSON.parse(news_file);
+        news_object_list.push(news_object);
+    }
+    News.insertMany(news_object_list, function(error, documents)
     {
         if (error)
         {
             return console.error(error);
         }
+        console.log(`${documents.length} news inserted`);
+        round = round + 1;
+        if (round < 10)
+        {
+            insert_news(round);
+        }
+        else
+        {
+            process.exit();
+        }
     });
 }
+
+insert_news(0);

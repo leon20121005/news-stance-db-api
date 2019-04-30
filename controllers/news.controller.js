@@ -2,23 +2,20 @@ const News = require('../models/news.model');
 
 exports.index = function(request, response)
 {
-    News.find(function(error, documents)
+    response.setHeader('Content-Disposition', 'attachment; filename=news.json');
+    response.setHeader('Content-Type', 'application/json');
+    News.find().cursor()
+    .on('data', function(document)
     {
-        if (error)
-        {
-            return console.error(error);
-        }
-        if (documents.length == 0)
-        {
-            return response.send('document length: 0');
-        }
-        const data = JSON.stringify(documents);
-        response.setHeader('Content-Disposition', 'attachment; filename=news.json');
-        response.setHeader('Content-Type', 'application/json');
+        const data = JSON.stringify(document);
         response.write(data, function(error)
         {
-            response.end();
+            return console.error(error);
         });
+    })
+    .on('end', function()
+    {
+        response.end();
     });
 };
 
