@@ -8,7 +8,9 @@ const PORT = 3000;
 mongoose.connect(DATABASE_URL, {useNewUrlParser: true});
 
 const news = require('./routes/news.route');
+const term = require('./routes/term.route');
 app.use('/news', news);
+app.use('/term', term);
 
 app.get('/', function(request, response)
 {

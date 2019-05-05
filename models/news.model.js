@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 var NewsSchema = new mongoose.Schema(
     {
-
         index: String,
         title: String,
         title_segmentation: [String],

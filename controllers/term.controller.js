@@ -1,12 +1,12 @@
-const News = require('../models/news.model');
+const Term = require('../models/term.model');
 
 exports.index = function(request, response)
 {
-    const download_file_name = 'news.json';
+    const download_file_name = 'term.json';
     var is_first_object = true;
     response.setHeader('Content-Disposition', `attachment; filename=${download_file_name}`);
     response.setHeader('Content-Type', 'application/json');
-    News.find().cursor()
+    Term.find().cursor()
     .on('data', function(document)
     {
         var prefix = is_first_object ? '[' : ',';
@@ -30,7 +30,7 @@ exports.index = function(request, response)
 exports.show = function(request, response)
 {
     const index = request.params.id;
-    News.findOne({index: index}, function(error, document)
+    Term.findOne({id: index}, function(error, document)
     {
         if (error)
         {
